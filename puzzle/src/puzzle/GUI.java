@@ -1,0 +1,351 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package puzzle;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+/**
+ *
+ * @author Saqib
+ */
+public class GUI extends javax.swing.JFrame {
+
+    public final BoardControl boardControl;
+    private final JButton tiles[];
+
+    public GUI() {
+        
+        //frame Title
+        super("8 Puzzle");
+        
+        //set GUI settings
+        initComponents();
+        this.setLocationRelativeTo(null);   //center the frame in the screen on open
+        this.setResizable(false);
+        this.setAlwaysOnTop(true);
+        
+        //Global variabels intialization
+        this.tiles = new JButton[]{Tile_1, Tile_2, Tile_3, Tile_4, Tile_5, Tile_6, Tile_7, Tile_8, Tile_0};
+        this.boardControl = new BoardControl();
+        
+        //intialize the tiles, set the font, disable focus and add the action listener
+        for(int i = 0 ; i < tiles.length ; ++i){
+            
+            tiles[i].setFocusable(false);
+            tiles[i].setFont(tiles[i].getFont().deriveFont(25.0f));
+            
+            tiles[i].addActionListener(new ActionListener() {
+                
+                int num;
+                
+                ActionListener me(int i){
+                    num = i;
+                    return this;
+                }
+                
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(GUI.this.boardControl.isSolving()) return;
+                    GUI.this.boardControl.tilePressed(num);
+                    GUI.this.drawBoard();
+                }
+            }.me(i));
+        }
+        
+        //action listener for the reset button
+        Button_Reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUI.this.boardControl.resetBoard();
+                GUI.this.drawBoard();
+            }
+        });
+        
+        //action listener for the randomize button
+        Button_Rand.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(GUI.this.boardControl.isSolving()) return;
+                GUI.this.boardControl.randomizeBoard();
+                GUI.this.drawBoard();
+            }
+        });
+        
+        //action listener for the solve button
+        Button_Solve_A.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(GUI.this.boardControl.isSolving()) return;
+                GUI.this.boardControl.solve(GUI.this, Solvers.SOLVE_METHOD.A_STAR);
+                GUI.this.pack();
+               GUI.this.setLocationRelativeTo(null);
+            }
+        });
+        
+        
+        Button_Speed.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(GUI.this.boardControl.isSolving()) return;
+                String crnt = ((JButton)e.getSource()).getText();
+                switch(crnt){
+                    case "Slow":
+                        GUI.this.boardControl.setTimerSpeed(BoardControl.SPEED.MEDIUM);
+                        GUI.this.Button_Speed.setText("Medium");
+                        break;
+                    case "Medium":
+                        GUI.this.boardControl.setTimerSpeed(BoardControl.SPEED.FAST);
+                        GUI.this.Button_Speed.setText("Fast");
+                        break;
+                    case "Fast":
+                        GUI.this.boardControl.setTimerSpeed(BoardControl.SPEED.SLOW);
+                        GUI.this.Button_Speed.setText("Slow");
+                        break;
+                }
+            }
+            
+        });
+        
+        this.drawBoard();
+        this.pack();
+    }
+public final void drawBoard(){
+        final byte[] board = boardControl.getCurrentBoard();
+        int empty = -1;
+        
+        //label the buttons (the tiles)
+        for(int i = 0 ; i < board.length ; ++i){
+            if(board[i] == 0) empty = i;
+            else tiles[i].setText(String.valueOf(board[i]));
+        }
+        
+        //show all the buttons then hide the blank one
+        for(JButton tile : tiles) tile.setVisible(true);
+        tiles[empty].setVisible(false);
+
+        //notify the panel to update
+        Main_Middle.repaint();
+        Main_Middle.revalidate();
+    }
+  public void setStatus(String stat){
+       this.Label_Status.setText(stat);
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        Main_Middle = new javax.swing.JPanel();
+        Tile_1 = new javax.swing.JButton();
+        Tile_2 = new javax.swing.JButton();
+        Tile_3 = new javax.swing.JButton();
+        Tile_4 = new javax.swing.JButton();
+        Tile_5 = new javax.swing.JButton();
+        Tile_6 = new javax.swing.JButton();
+        Tile_7 = new javax.swing.JButton();
+        Tile_8 = new javax.swing.JButton();
+        Tile_0 = new javax.swing.JButton();
+        Main_Right = new javax.swing.JPanel();
+        ButtonsPanel = new javax.swing.JPanel();
+        Button_Reset = new javax.swing.JButton();
+        Button_Rand = new javax.swing.JButton();
+        Button_Speed = new javax.swing.JButton();
+        Button_Solve_A = new javax.swing.JButton();
+        Label_Status = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        Tile_1.setText("1");
+
+        Tile_2.setText("2");
+
+        Tile_3.setText("3");
+
+        Tile_4.setText("4");
+
+        Tile_5.setText("5");
+
+        Tile_6.setText("6");
+        Tile_6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Tile_6ActionPerformed(evt);
+            }
+        });
+
+        Tile_7.setText("7");
+
+        Tile_8.setText("8");
+
+        Tile_0.setText("-");
+
+        javax.swing.GroupLayout Main_MiddleLayout = new javax.swing.GroupLayout(Main_Middle);
+        Main_Middle.setLayout(Main_MiddleLayout);
+        Main_MiddleLayout.setHorizontalGroup(
+            Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Main_MiddleLayout.createSequentialGroup()
+                .addGroup(Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Tile_1, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
+                    .addComponent(Tile_4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Tile_7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Tile_5, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tile_2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tile_8, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Tile_3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tile_6, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tile_0, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        Main_MiddleLayout.setVerticalGroup(
+            Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Main_MiddleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Tile_1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tile_2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tile_3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Tile_5, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tile_4, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Tile_6, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(Main_MiddleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(Tile_8, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Tile_7, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Tile_0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        Button_Reset.setText("Reset");
+
+        Button_Rand.setText("Randomize");
+        Button_Rand.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Button_RandActionPerformed(evt);
+            }
+        });
+
+        Button_Speed.setText("Slow");
+
+        Button_Solve_A.setText("A *");
+
+        javax.swing.GroupLayout ButtonsPanelLayout = new javax.swing.GroupLayout(ButtonsPanel);
+        ButtonsPanel.setLayout(ButtonsPanelLayout);
+        ButtonsPanelLayout.setHorizontalGroup(
+            ButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ButtonsPanelLayout.createSequentialGroup()
+                .addGroup(ButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ButtonsPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(ButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(Button_Solve_A, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Button_Reset, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Button_Rand, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Button_Speed, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(ButtonsPanelLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(Label_Status)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        ButtonsPanelLayout.setVerticalGroup(
+            ButtonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ButtonsPanelLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(Label_Status)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Button_Rand)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Button_Reset)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Button_Solve_A)
+                .addGap(18, 18, 18)
+                .addComponent(Button_Speed)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout Main_RightLayout = new javax.swing.GroupLayout(Main_Right);
+        Main_Right.setLayout(Main_RightLayout);
+        Main_RightLayout.setHorizontalGroup(
+            Main_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Main_RightLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ButtonsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+        Main_RightLayout.setVerticalGroup(
+            Main_RightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Main_RightLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ButtonsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(Main_Middle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(Main_Right, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(30, 30, 30))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(Main_Middle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Main_Right, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void Tile_6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Tile_6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Tile_6ActionPerformed
+
+    private void Button_RandActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_RandActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Button_RandActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Button_Rand;
+    private javax.swing.JButton Button_Reset;
+    private javax.swing.JButton Button_Solve_A;
+    private javax.swing.JButton Button_Speed;
+    private javax.swing.JPanel ButtonsPanel;
+    private javax.swing.JLabel Label_Status;
+    private javax.swing.JPanel Main_Middle;
+    private javax.swing.JPanel Main_Right;
+    private javax.swing.JButton Tile_0;
+    private javax.swing.JButton Tile_1;
+    private javax.swing.JButton Tile_2;
+    private javax.swing.JButton Tile_3;
+    private javax.swing.JButton Tile_4;
+    private javax.swing.JButton Tile_5;
+    private javax.swing.JButton Tile_6;
+    private javax.swing.JButton Tile_7;
+    private javax.swing.JButton Tile_8;
+    // End of variables declaration//GEN-END:variables
+//}
+}
